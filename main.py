@@ -11,7 +11,7 @@ load_dotenv()
 
 
 token = os.getenv('TOKEN')
-dev = [756728239673573376]
+dev = [] # 開発者のIDを入れる
 
 class MyBot(commands.Bot):
     async def setup_hook(self):
@@ -67,6 +67,9 @@ class DevGroup(app_commands.Group):
     @app_commands.command(name="reload", description="コマンドをリロードします")
     @app_commands.autocomplete(cog=cog_autocomplete)
     async def reload_cog(self, interaction: discord.Interaction, cog: str):
+        if interaction.user.id not in dev:
+            await interaction.response.send_message("このコマンドを実行する権限がありません。", ephemeral=True)
+            return
         available_cogs = self._get_available_cogs()
 
         if cog not in available_cogs:
@@ -86,6 +89,9 @@ class DevGroup(app_commands.Group):
     @app_commands.command(name="load", description="コマンドをロードします")
     @app_commands.autocomplete(cog=cog_autocomplete)
     async def load_cog(self, interaction: discord.Interaction, cog: str):
+        if interaction.user.id not in dev:
+            await interaction.response.send_message("このコマンドを実行する権限がありません。", ephemeral=True)
+            return
         available_cogs = self._get_available_cogs()
 
         if cog not in available_cogs:
@@ -105,6 +111,9 @@ class DevGroup(app_commands.Group):
     @app_commands.command(name="unload", description="コマンドをアンロードします")
     @app_commands.autocomplete(cog=cog_autocomplete)
     async def unload_cog(self, interaction: discord.Interaction, cog: str):
+        if interaction.user.id not in dev:
+            await interaction.response.send_message("このコマンドを実行する権限がありません。", ephemeral=True)
+            return
         available_cogs = self._get_available_cogs()
 
         if cog not in available_cogs:
@@ -123,6 +132,9 @@ class DevGroup(app_commands.Group):
     
     @app_commands.command(name="sync", description="コマンドを同期します")
     async def sync_cog(self, interaction: discord.Interaction):
+        if interaction.user.id not in dev:
+            await interaction.response.send_message("このコマンドを実行する権限がありません。", ephemeral=True)
+            return
         await bot.tree.sync()
         await interaction.response.send_message("コマンドを同期しました。")
 
